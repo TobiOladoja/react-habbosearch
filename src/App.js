@@ -1,32 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
+import axios from 'axios';
+import UserForm from './components/UserForm';
 
 function App() {
-  const [search, setSearch] = useState('');
-  const [results, setResults] = useState([]);
-  const [names, setNames] = useState([]);
-  const [descriptions, setDescriptions] = useState([]);
-  const [links, setLinks] = useState([]);
+  const getUser = (e) => {
+    e.preventDefault();
+    const user = e.target.elements.username.value;
+    axios
+      .get(`https://www.habbo.com/api/public/users?name=${user}`)
+      .then((res) => {
+        console.log(res);
+      });
+  };
 
-  async function makeSearch() {
-    const url = `https://en.wikipedia.org/w/api.phpaction=opensearch&search=${search}&format=json&origin=*`;
-    const response = await fetch(url);
-    const jsonRes = await response.json();
-
-    setNames(jsonRes[1]);
-    setDescriptions(jsonRes[2]);
-    setLinks(jsonRes[3]);
-  }
   return (
     <div className='box-wrapper'>
       <div className='box'>
-        <h3>React Wikipedia Viewer</h3>
-        <input value={search} onChange={(e) => setSearch(e.target.value)} />
-        <button onClick={makeSearch}>Search</button>
-
-        {names.map((name) => (
-          <div> {name} </div>
-        ))}
+        <h1>Search Habbo User</h1>
+        <UserForm getUser={getUser} />
       </div>
     </div>
   );
