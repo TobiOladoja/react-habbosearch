@@ -8,6 +8,7 @@ function App() {
     name: null,
     motto: null,
     memberSince: null,
+    date: null,
   });
 
   const getUser = (e) => {
@@ -18,9 +19,12 @@ function App() {
         .get(`https://www.habbo.com/api/public/users?name=${user}`)
         .then((res) => {
           console.log(res);
-          const { name, motto } = res.data;
+          const { name, motto, memberSince } = res.data;
 
-          setLists({ name, motto });
+          let newDate = new Date(res.data.memberSince);
+          let date = newDate.toLocaleString();
+          console.log(date);
+          setLists({ name, motto, memberSince, date });
         });
     } else return;
   };
@@ -33,7 +37,7 @@ function App() {
         {lists.name ? (
           <p>
             Username: {lists.name} <br /> Motto: {lists.motto} <br /> Member
-            since: {lists.memberSince}
+            since: {lists.date}
           </p>
         ) : (
           <p>Please enter a username</p>
